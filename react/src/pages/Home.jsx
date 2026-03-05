@@ -4,6 +4,15 @@ import { Link } from "react-router-dom";
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const categoryImages = {
+
+    1: "https://calvinklein.scene7.com/is/image/CalvinKlein/4LD298G_YAF_main?wid=1487&qlt=80%2C0&resMode=sharp2&op_usm=0.9%2C1.0%2C8%2C0&iccEmbed=0&fmt=webp",
+
+    2: "https://i.pinimg.com/736x/85/14/0e/85140ed33cce9ece257650252c1331a8.jpg",
+
+    3: "https://eu-images.contentstack.com/v3/assets/bltba21507b68af827e/blt692a42bac2b81162/68cba1c564a9b554d29535a6/1_B.png?branch=prod_alias&format=webply&quality=70&width=768&crop=1200,1600,x0,y0"
+
+  };
 
   const fetchProducts = async () => {
     const res = await fetch("/api/products", {
@@ -119,16 +128,22 @@ const Home = () => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 max-w-6xl mx-auto">
           {categories.slice(0, 3).map((category) => (
-            <div key={category.id} className="pb-4">
+            <Link
+              to={`/products/category/${category.id}`}
+              key={category.id}
+              className="pb-4 block"
+            >
+
               <img
-                src="https://i.pinimg.com/736x/85/14/0e/85140ed33cce9ece257650252c1331a8.jpg"
+                src={categoryImages[category.id]}
                 alt="Shirt"
                 className="transform hover:scale-105 transition duration-300 ease-in-out"
               />
               <h3 className="mt-2 text-xl font-semibold text-center pt-4">
                 {category.name}
               </h3>
-            </div>
+
+            </Link>
           ))}
         </div>
       </section>

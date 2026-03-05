@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
+import CategoryProducts from "./pages/CategoryProducts";
 import AuthContextProvider from "./Context/AuthContext";
 import Cart from "./pages/Cart";
 
@@ -21,6 +22,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/products/category/:id" element={<CategoryProducts />}
+          />
           <Route path="/cart" element={<Cart />} />
         </Routes>
 

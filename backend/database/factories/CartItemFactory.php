@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Cart;
-use App\Models\Product;
+use App\Models\ProductVariants;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CartItem>
@@ -20,7 +20,8 @@ class CartItemFactory extends Factory
     {
         return [
             'cart_id' => Cart::factory(),
-            'product_id' => Product::pluck('id')->random(),
+            'product_variant_id' => ProductVariants::pluck('id')->random(),
+            'quantity' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

@@ -1,8 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, Links } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 const NavBar = () => {
   const { user, setToken, setUser, token } = useContext(AuthContext);
+  const [categories, setCategories] = useState([]);
+
+  const fetchCategories = async () => {
+    const res = await fetch("/api/categories", {
+      method: "GET",
+    });
+
+    const data = await res.json();
+    setCategories(data);
+    console.log(data);
+  };
 
   async function handleLogout(e) {
     e.preventDefault();
@@ -22,6 +33,10 @@ const NavBar = () => {
     }
   }
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   return (
     <nav
       id="navbar"
@@ -37,21 +52,21 @@ const NavBar = () => {
             Home
           </Link>
         </li>
-        <li>
-          <a href="#" className="hover:text-gray-500">
-            Categories
-          </a>
-        </li>
+
         <li>
           <Link to="/products" className="cursor-pointer">
             Products
           </Link>
         </li>
-        <li>
-          <a href="#contact" className="hover:text-gray-500">
-            Contact
-          </a>
-        </li>
+
+        {categories.map((category) => (
+          <li>
+            <Link to={`/products/category/${category.id}`} className="cursor-pointer">
+              {category.name}
+            </Link>
+          </li>
+        ))}
+
       </ul>
 
       <div className="flex items-center gap-4">

@@ -1,11 +1,13 @@
 import { useEffect, useState, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState();
   const { token, setToken, user, setUser } = useContext(AuthContext);
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   const getproduct = async () => {
     const res = await fetch(`/api/products/${id}`, {
@@ -22,11 +24,21 @@ const ProductDetail = () => {
         alert("Please login to add to cart");
         return;
       }
-      const res = await fetch(`/api/cart/${id}`, {
+
+      if (!selectedVariant) {  // Check if a variant is selected
+        alert("Please select a size");
+        return;
+      }
+
+      const res = await fetch(`/api/cart/${selectedVariant.id}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          quantity: quantity,
+        }),
       });
 
       if (!res.ok) {
@@ -35,7 +47,7 @@ const ProductDetail = () => {
       alert("Added to Cart");
     } catch (error) {
       console.log(error);
-      alert("Failed to add to cart");
+      alert("Failed to add to cart 2nd");
     }
   };
 
@@ -84,6 +96,47 @@ const ProductDetail = () => {
           </div>
 
           <p className="text-gray-500 mt-2">{product?.description}</p>
+
+          {/* Size */}
+          <div className="mt-4">
+            <h4 className="font-semibold">Size</h4>
+            <div className="flex space-x-3 mt-2">
+              {product?.product_variants?.map((variant) => (
+                <button
+                  key={variant.id}
+                  onClick={() => setSelectedVariant(variant)}
+                  className={`px-4 py-2 border ${selectedVariant?.id === variant.id
+                    ? "bg-black text-white"
+                    : "bg-white"
+                    }`}
+                >
+                  {variant.size}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quantity */}
+          <div className="mt-4">
+            <h4 className="font-semibold">Quantity</h4>
+            <div className="flex items-center space-x-3 mt-2">
+              <button
+                onClick={() => quantity > 1 && setQuantity(quantity - 1)}
+                className="px-3 py-1 border"
+              >
+                -
+              </button>
+
+              <span>{quantity}</span>
+
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                className="px-3 py-1 border"
+              >
+                +
+              </button>
+            </div>
+          </div>
 
           <button
             onClick={addToCart}

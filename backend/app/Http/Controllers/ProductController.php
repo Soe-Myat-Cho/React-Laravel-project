@@ -22,7 +22,9 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         try {
-            return response()->json($product);
+            return response()->json(
+                $product->load('productVariants') //product now has productVariants
+            );
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

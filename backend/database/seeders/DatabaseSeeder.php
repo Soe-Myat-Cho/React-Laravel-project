@@ -11,6 +11,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductVariants;
 
 class DatabaseSeeder extends Seeder
 {
@@ -43,7 +44,26 @@ class DatabaseSeeder extends Seeder
 
         //Category::factory(5)->create();
 
-        Product::factory(10)->create();
+        // Product::factory(40)
+        //     ->has(ProductVariants::factory(3), 'productVariants')
+        //     ->create();
+
+        // User::factory(5)
+        //     ->has(Cart::factory()->has(CartItem::factory(3), 'cartItems'))
+        //     ->has(Order::factory(2)->has(OrderItem::factory(3), 'order_items'))
+        //     ->create();
+
+        Product::factory(20)
+            ->has(
+                ProductVariants::factory()
+                    ->count(3)
+                    ->sequence(
+                        ['size' => 'S'],
+                        ['size' => 'M'],
+                        ['size' => 'L'],
+                    )
+            )
+            ->create();
 
         User::factory(5)
             ->has(Cart::factory()->has(CartItem::factory(3), 'cartItems'))

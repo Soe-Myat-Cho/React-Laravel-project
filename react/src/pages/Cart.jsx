@@ -34,14 +34,30 @@ const Cart = () => {
     }
   };
 
+  // const calculateTotalPrice = () => {
+  //   let total = 0;
+  //   cartItems.forEach((cartItem) => {
+  //     total +=
+  //       cartItem.product.price -
+  //       cartItem.product.price * (cartItem.product.discount_percentage / 100);
+  //   });
+  //   setTotalPrice(total.toFixed(1)); // Format only at the end
+  // };
+
   const calculateTotalPrice = () => {
     let total = 0;
+
     cartItems.forEach((cartItem) => {
-      total +=
-        cartItem.product.price -
-        cartItem.product.price * (cartItem.product.discount_percentage / 100);
+      const product = cartItem.product_variant.product;
+
+      const price =
+        product.price -
+        product.price * (product.discount_percentage / 100);
+
+      total += price * cartItem.quantity;
     });
-    setTotalPrice(total.toFixed(1)); // Format only at the end
+
+    setTotalPrice(total.toFixed(1));
   };
 
   const handleCheckout = async () => {
@@ -67,11 +83,21 @@ const Cart = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (token) {
+  //     getCartItems();
+  //     calculateTotalPrice();
+  //   }
+  // }, [cartItems]);
+
   useEffect(() => {
     if (token) {
       getCartItems();
-      calculateTotalPrice();
     }
+  }, [token]);
+
+  useEffect(() => {
+    calculateTotalPrice();
   }, [cartItems]);
 
   if (cartItems.length === 0) {
@@ -101,9 +127,11 @@ const Cart = () => {
               />
               <div className="flex-1 space-y-4">
                 <div>
-                  <h3 className="text-xl">{cartItem.product.name}</h3>
+                  <h3 className="text-xl">{cartItem.product_variant.product.name}</h3>
 
-                  {cartItem.product.discount_percentage > 0 && (
+                  <p className="text-gray-500">Size: {cartItem.product_variant.size}</p>
+
+                  {/* {cartItem.product.discount_percentage > 0 && (
                     <p className="text-gray-500 line-through">
                       ${cartItem.product.price}
                     </p>
@@ -115,17 +143,42 @@ const Cart = () => {
                       {(
                         cartItem.product.price -
                         cartItem.product.price *
-                          (cartItem.product.discount_percentage / 100)
+                        (cartItem.product.discount_percentage / 100)
                       ).toFixed(1)}
                     </p>
                   ) : (
                     <p className="text-lg font-medium text-gray-900">
                       ${cartItem.product.price}
                     </p>
-                  )}
+                  )} */}
+
+                  {(() => {
+                    const product = cartItem.product_variant.product;
+
+                    const discountedPrice =
+                      product.price -
+                      product.price * (product.discount_percentage / 100);
+
+                    return (
+                      <>
+                        {product.discount_percentage > 0 && (
+                          <p className="text-gray-500 line-through">
+                            ${product.price}
+                          </p>
+                        )}
+
+                        <p className="text-lg font-medium text-gray-900">
+                          ${discountedPrice.toFixed(1)}
+                        </p>
+                      </>
+                    );
+                  })()}
                 </div>
                 <p className="text-gray-800 w-3/5">
-                  {cartItem.product.description}
+                  {cartItem.product_variant.product.description}
+                </p>
+                <p className="text-gray-700">
+                  Quantity: {cartItem.quantity}
                 </p>
               </div>
               <button

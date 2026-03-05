@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Order;
-use App\Models\Product;
+use App\Models\ProductVariants;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItem>
@@ -20,8 +20,9 @@ class OrderItemFactory extends Factory
     {
         return [
             'order_id' => Order::factory(),
-            'product_id' => Product::pluck('id')->random(),
+            'product_variant_id' => ProductVariants::pluck('id')->random(),
             'price' => $this->faker->randomFloat(3, 0, 100),
+            'quantity' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
