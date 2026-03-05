@@ -34,15 +34,7 @@ const Cart = () => {
     }
   };
 
-  // const calculateTotalPrice = () => {
-  //   let total = 0;
-  //   cartItems.forEach((cartItem) => {
-  //     total +=
-  //       cartItem.product.price -
-  //       cartItem.product.price * (cartItem.product.discount_percentage / 100);
-  //   });
-  //   setTotalPrice(total.toFixed(1)); // Format only at the end
-  // };
+
 
   const calculateTotalPrice = () => {
     let total = 0;
@@ -83,12 +75,7 @@ const Cart = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (token) {
-  //     getCartItems();
-  //     calculateTotalPrice();
-  //   }
-  // }, [cartItems]);
+
 
   useEffect(() => {
     if (token) {
@@ -130,27 +117,6 @@ const Cart = () => {
                   <h3 className="text-xl">{cartItem.product_variant.product.name}</h3>
 
                   <p className="text-gray-500">Size: {cartItem.product_variant.size}</p>
-
-                  {/* {cartItem.product.discount_percentage > 0 && (
-                    <p className="text-gray-500 line-through">
-                      ${cartItem.product.price}
-                    </p>
-                  )}
-
-                  {cartItem.product.discount_percentage > 0 ? (
-                    <p className="text-lg font-medium text-gray-900">
-                      $
-                      {(
-                        cartItem.product.price -
-                        cartItem.product.price *
-                        (cartItem.product.discount_percentage / 100)
-                      ).toFixed(1)}
-                    </p>
-                  ) : (
-                    <p className="text-lg font-medium text-gray-900">
-                      ${cartItem.product.price}
-                    </p>
-                  )} */}
 
                   {(() => {
                     const product = cartItem.product_variant.product;
