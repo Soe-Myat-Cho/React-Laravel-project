@@ -66,8 +66,8 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         User::factory(5)
-            ->has(Cart::factory()->has(CartItem::factory(3), 'cartItems'))
-            ->has(Order::factory(2)->has(OrderItem::factory(3), 'order_items'))
+            // ->has(Cart::factory()->has(CartItem::factory(3), 'cartItems'))
+            // ->has(Order::factory(2)->has(OrderItem::factory(3), 'order_items'))
             ->create();
     }
 }

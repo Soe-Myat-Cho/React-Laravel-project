@@ -104,11 +104,11 @@ const Products = () => {
                             <div className="flex space-x-3 items-baseline">
                                 {product.discount_percentage > 0 ? (
                                     <p className="mt-1 text-xl text-gray-900">
-                                        $
+
                                         {(
                                             product.price -
                                             product.price * (product.discount_percentage / 100)
-                                        ).toFixed(1)}
+                                        ).toFixed(1)} Ks
                                     </p>
                                 ) : (
                                     <p className="mt-1 text-xl text-gray-900">${product.price}</p>

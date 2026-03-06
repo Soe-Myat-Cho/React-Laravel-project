@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
@@ -22,6 +23,7 @@ class OrderController extends Controller
             $validated = Validator::make(request()->all(), [
                 'total_price' => 'required',
                 'shipping_address' => 'required',
+                'payment_method' => 'required|in:cod,kbzpay'
             ]);
 
             if ($validated->fails()) {
@@ -34,6 +36,13 @@ class OrderController extends Controller
                 'shipping_address' => request('shipping_address'),
             ]);
 
+            Payment::create([
+                'order_id' => $order->id,
+                'payment_method' => request('payment_method'),
+                'amount' => $order->total_price,
+                'status' => request('payment_method') === 'cod' ? 'pending' : 'pending'
+            ]);
+
             $cart_items = $user->cart
                 ->cartItems()
                 ->with('productVariant.product')
@@ -43,6 +52,12 @@ class OrderController extends Controller
 
                 $variant = $cart_item->productVariant;
                 $product = $variant->product;
+
+                if ($variant->stock < $cart_item->quantity) {
+                    return response()->json([
+                        'error' => $product->name . ' is out of stock'
+                    ], 400);
+                }
 
                 $discountedPrice =
                     $product->price -
@@ -54,6 +69,8 @@ class OrderController extends Controller
                     'quantity' => $cart_item->quantity,
                     'price' => $discountedPrice
                 ]);
+
+                $variant->decrement('stock', $cart_item->quantity);
 
                 $cart_item->delete();
             }

@@ -53,11 +53,11 @@ const NavBar = () => {
           </Link>
         </li>
 
-        <li>
+        {/* <li>
           <Link to="/products" className="cursor-pointer">
             Products
           </Link>
-        </li>
+        </li> */}
 
         {categories.map((category) => (
           <li>
