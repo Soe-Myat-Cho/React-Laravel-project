@@ -6,7 +6,6 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [shippingAddress, setShippingAddress] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("cod");
 
   const getCartItems = async () => {
     const res = await fetch("/api/cart-items", {
@@ -63,7 +62,6 @@ const Cart = () => {
       body: JSON.stringify({
         shipping_address: shippingAddress,
         total_price: totalPrice,
-        payment_method: paymentMethod,
       }),
     });
 
@@ -172,35 +170,6 @@ const Cart = () => {
             rows="8"
             placeholder="Enter your shipping address"
           ></textarea>
-        </div>
-
-        <div className="mt-4">
-          <label className="block font-semibold mb-2">Payment Method</label>
-
-          <select
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-            className="w-full p-2 border"
-          >
-            <option value="cod">Cash on Delivery</option>
-            <option value="kbzpay">KBZ Pay</option>
-          </select>
-
-          {paymentMethod === "kbzpay" && (
-            <div className="mt-4 p-4 border rounded bg-blue-500 text-center">
-              <p className="font-semibold mb-2">Scan QR to Pay with KBZ Pay</p>
-
-              <img
-                src="/qrCode.png"
-                alt="KBZ Pay QR"
-                className="mx-auto w-48"
-              />
-
-              <p className="text-sm mt-2">
-                After payment, click Checkout to confirm your order.
-              </p>
-            </div>
-          )}
         </div>
 
         <button
