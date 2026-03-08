@@ -22,6 +22,8 @@ class OrderController extends Controller
             $validated = Validator::make(request()->all(), [
                 'total_price' => 'required',
                 'shipping_address' => 'required',
+                'receiver_name' => 'required',
+                'phone_number' => 'required',
             ]);
 
             if ($validated->fails()) {
@@ -32,6 +34,10 @@ class OrderController extends Controller
                 'user_id' => $user->id,
                 'total_price' => request('total_price'),
                 'shipping_address' => request('shipping_address'),
+                'receiver_name' => request('receiver_name'),
+                'phone_number' => request('phone_number'),
+                'delivery_notes' => request('delivery_notes'),
+                'payment_method' => 'cod'
             ]);
 
             $cart_items = $user->cart
@@ -44,6 +50,12 @@ class OrderController extends Controller
                 $variant = $cart_item->productVariant;
                 $product = $variant->product;
 
+                if ($variant->stock < $cart_item->quantity) {
+                    return response()->json([
+                        'error' => $product->name . ' is out of stock'
+                    ], 400);
+                }
+
                 $discountedPrice =
                     $product->price -
                     ($product->price * ($product->discount_percentage / 100));
@@ -54,6 +66,8 @@ class OrderController extends Controller
                     'quantity' => $cart_item->quantity,
                     'price' => $discountedPrice
                 ]);
+
+                $variant->decrement('stock', $cart_item->quantity);
 
                 $cart_item->delete();
             }

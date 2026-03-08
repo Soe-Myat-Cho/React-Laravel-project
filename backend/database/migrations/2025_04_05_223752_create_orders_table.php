@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
             $table->decimal('total_price', 8, 2);
+            $table->enum('payment_method', ['cod'])->default('cod');
             $table->string('shipping_address');
+            $table->string('phone_number');
+            $table->string('receiver_name');
+            $table->text('delivery_notes')->nullable();
             $table->timestamps();
         });
     }

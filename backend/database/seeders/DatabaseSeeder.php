@@ -56,11 +56,12 @@ class DatabaseSeeder extends Seeder
         Product::factory(20)
             ->has(
                 ProductVariants::factory()
-                    ->count(3)
+                    ->count(4)
                     ->sequence(
                         ['size' => 'S'],
                         ['size' => 'M'],
                         ['size' => 'L'],
+                        ['size' => 'XL'],
                     )
             )
             ->create();

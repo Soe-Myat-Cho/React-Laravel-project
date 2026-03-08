@@ -26,6 +26,7 @@ class ProductFactory extends Factory
             'image1' => $this->faker->imageUrl(),
             'image2' => $this->faker->imageUrl(),
             'image3' => $this->faker->imageUrl(),
+            'image4' => $this->faker->imageUrl(),
             'category_id' => Category::pluck('id')->random(),
         ];
     }

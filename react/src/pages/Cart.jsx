@@ -6,6 +6,10 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [shippingAddress, setShippingAddress] = useState("");
+  const [receiverName, setReceiverName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [deliveryNotes, setDeliveryNotes] = useState("");
+  const [errors, setErrors] = useState({});
 
   const getCartItems = async () => {
     const res = await fetch("/api/cart-items", {
@@ -52,7 +56,54 @@ const Cart = () => {
     setTotalPrice(total.toFixed(1));
   };
 
+  const updateQuantity = async (id, quantity) => {
+
+    const res = await fetch(`/api/cart-items/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ quantity }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      getCartItems(); // refresh cart
+    } else {
+      alert(data.error);
+    }
+  };
+
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!receiverName.trim()) {
+      newErrors.receiverName = "Receiver name is required";
+    }
+
+    if (!phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (!/^[0-9]{8,15}$/.test(phoneNumber)) {
+      newErrors.phoneNumber = "Invalid phone number";
+    }
+
+    if (!shippingAddress.trim()) {
+      newErrors.shippingAddress = "Shipping address is required";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleCheckout = async () => {
+
+    if (!validateForm()) {
+      return;
+    }
+
     const res = await fetch("/api/order", {
       method: "POST",
       headers: {
@@ -62,6 +113,10 @@ const Cart = () => {
       body: JSON.stringify({
         shipping_address: shippingAddress,
         total_price: totalPrice,
+        receiver_name: receiverName,
+        phone_number: phoneNumber,
+        delivery_notes: deliveryNotes,
+        payment_method: "cod"
       }),
     });
 
@@ -143,9 +198,19 @@ const Cart = () => {
                 <p className="text-gray-800 w-3/5">
                   {cartItem.product_variant.product.description}
                 </p>
-                <p className="text-gray-700">
-                  Quantity: {cartItem.quantity}
-                </p>
+                <div className="flex items-center gap-2">
+
+                  <button onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}>
+                    -
+                  </button>
+
+                  <span>{cartItem.quantity}</span>
+
+                  <button onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}>
+                    +
+                  </button>
+
+                </div>
               </div>
               <button
                 onClick={() => removeFromCart(cartItem.id)}
@@ -160,7 +225,103 @@ const Cart = () => {
 
       <div className="mt-6 text-right">
         <h3 className="text-xl font-semibold">Total : ${totalPrice}</h3>
-        <div className="mt-4">
+        <div className="mt-8 bg-white border rounded-lg p-6 shadow-sm text-left">
+
+          <h3 className="text-lg font-semibold mb-6">Delivery Information</h3>
+
+          <div className="grid md:grid-cols-2 gap-6">
+
+            {/* Receiver Name */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Receiver Name
+              </label>
+              <input
+                type="text"
+                value={receiverName}
+                onChange={(e) => setReceiverName(e.target.value)}
+                className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 ${errors.receiverName ? "border-red-500 focus:ring-red-400" : "focus:ring-black"
+                  }`}
+                placeholder="John Smith"
+              />
+              {errors.receiverName && (
+                <p className="text-red-500 text-sm mt-1">{errors.receiverName}</p>
+              )}
+            </div>
+
+            {/* Phone Number */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Phone Number
+              </label>
+              <input
+                type="text"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 ${errors.phoneNumber ? "border-red-500 focus:ring-red-400" : "focus:ring-black"
+                  }`}
+                placeholder="0812345678"
+              />
+              {errors.phoneNumber && (
+                <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>
+              )}
+            </div>
+
+          </div>
+
+          {/* Address */}
+          <div className="mt-6">
+            <label className="block text-sm font-medium mb-1">
+              Shipping Address
+            </label>
+
+            <textarea
+              rows="4"
+              value={shippingAddress}
+              onChange={(e) => setShippingAddress(e.target.value)}
+              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 ${errors.shippingAddress ? "border-red-500 focus:ring-red-400" : "focus:ring-black"
+                }`}
+              placeholder="House number, street, city, province, postal code"
+            />
+
+            {errors.shippingAddress && (
+              <p className="text-red-500 text-sm mt-1">{errors.shippingAddress}</p>
+            )}
+          </div>
+
+          {/* Delivery Notes */}
+          <div className="mt-6">
+            <label className="block text-sm font-medium mb-1">
+              Delivery Notes (Optional)
+            </label>
+
+            <textarea
+              rows="3"
+              value={deliveryNotes}
+              onChange={(e) => setDeliveryNotes(e.target.value)}
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+              placeholder="Leave at door / call before delivery"
+            />
+          </div>
+
+          <div className="mt-6 border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded-md">
+            <h4 className="font-semibold text-yellow-800 mb-1">
+              Payment Method: Cash on Delivery (COD)
+            </h4>
+
+            <p className="text-sm text-yellow-700 leading-relaxed">
+              We currently accept <span className="font-medium">Cash on Delivery (COD)</span> only.
+              Please prepare the exact payment when your order arrives.
+              Our delivery staff will collect the payment upon delivery.
+            </p>
+
+            <p className="text-sm text-yellow-700 mt-2">
+              Orders will be processed after confirmation and delivered to the address you provided.
+            </p>
+          </div>
+
+        </div>
+        {/* <div className="mt-4">
           <textarea
             value={shippingAddress}
             onChange={(e) => setShippingAddress(e.target.value)}
@@ -170,7 +331,7 @@ const Cart = () => {
             rows="8"
             placeholder="Enter your shipping address"
           ></textarea>
-        </div>
+        </div> */}
 
         <button
           onClick={() => handleCheckout()}
@@ -178,6 +339,9 @@ const Cart = () => {
         >
           Checkout
         </button>
+        <p className="text-xs text-gray-500 mt-2">
+          Payment method: Cash on Delivery (COD)
+        </p>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formdata, setFormData] = useState({
@@ -8,6 +9,7 @@ const Login = () => {
   });
 
   const { setToken } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -23,7 +25,7 @@ const Login = () => {
       localStorage.setItem("token", data.token);
       setToken(data.token);
       alert("Logged In Successfully");
-      //navigate("/");
+      navigate("/");
     }
     setFormData({ email: "", password: "" });
   }

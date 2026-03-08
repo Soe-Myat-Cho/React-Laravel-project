@@ -72,7 +72,8 @@ Route::get('/cart-items', [CartItemController::class, 'getCartItems'])->middlewa
 //remove cart-item
 Route::delete('/cart-items/{cartItem}', [CartItemController::class, 'removeFromCart'])->middleware('auth:sanctum');
 
-
+//update cart-item
+Route::put('/cart-items/{id}', [CartController::class, 'updateCartItem']);
 
 //order
 Route::post('/order', [OrderController::class, 'order'])->middleware('auth:sanctum');

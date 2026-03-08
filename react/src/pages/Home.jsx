@@ -73,54 +73,6 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="bg-red">
-        <div className="mx-auto max-w-2xl py-5 sm:py-20 lg:max-w-full">
-          <h2 className="text-3xl tracking-tight text-gray-900 mb-3 text-center">
-            Customers also purchased
-          </h2>
-          <div className="product-container grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-2">
-            {products.slice(0, 4).map((product) => (
-              <div key={product.id} className="py-8">
-                <Link to={`/products/${product.id}`}>
-                  <img
-                    src="https://dtcralphlauren.scene7.com/is/image/PoloGSI/s7-AI211970691001_alternate10?$plpDeskRF$"
-                    className="aspect-square w-full h-full object-cover xl:aspect-7/8 transform hover:opacity-90 transition duration-300 ease-in-out"
-                  />
-                  <div className="items-baseline flex space-x-3">
-                    <p className="mt-4 text-lg text-gray-700">{product.name}</p>
-                    {product.discount_percentage > 0 && (
-                      <p className="mt-1 text-md text-gray-600">
-                        {product.discount_percentage}% Off
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex space-x-3 items-baseline">
-                    {product.discount_percentage > 0 ? (
-                      <p className="mt-1 text-xl text-gray-900">
-
-                        {(
-                          product.price -
-                          product.price * (product.discount_percentage / 100)
-                        ).toFixed(1)} Ks
-                      </p>
-                    ) : (
-                      <p className="mt-1 text-xl text-gray-900">
-                        ${product.price}
-                      </p>
-                    )}
-
-                    {product.discount_percentage > 0 && (
-                      <p className="mt-1 text-md text-gray-600 line-through">
-                        ${product.price}
-                      </p>
-                    )}
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
       <section className="py-12">
         <h2 className="text-3xl mb-10 text-gray-900 text-center">
@@ -157,14 +109,6 @@ const Home = () => {
             <p className="mt-8 text-lg text-gray-500 sm:text-xl">
               "Fashion is part of the daily air and it changes all the time..."
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="#"
-                className="bg-gray-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-gray-700"
-              >
-                Shop Now
-              </a>
-            </div>
           </div>
         </div>
       </section>

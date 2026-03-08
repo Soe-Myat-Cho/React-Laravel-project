@@ -30,6 +30,11 @@ const ProductDetail = () => {
         return;
       }
 
+      if (quantity > selectedVariant.stock) {
+        alert("Not enough stock available");
+        return;
+      }
+
       const res = await fetch(`/api/cart/${selectedVariant.id}`, {
         method: "POST",
         headers: {
@@ -104,17 +109,27 @@ const ProductDetail = () => {
               {product?.product_variants?.map((variant) => (
                 <button
                   key={variant.id}
-                  onClick={() => setSelectedVariant(variant)}
-                  className={`px-4 py-2 border ${selectedVariant?.id === variant.id
-                    ? "bg-black text-white"
-                    : "bg-white"
-                    }`}
+                  disabled={variant.stock === 0}
+                  onClick={() => {
+                    setSelectedVariant(variant);
+                    setQuantity(1);
+                  }}
+                  className={`px-4 py-2 border
+                   ${variant.stock === 0 ? "opacity-40 cursor-not-allowed" : ""}
+                   ${selectedVariant?.id === variant.id ? "bg-black text-white" : ""}
+                  `}
                 >
                   {variant.size}
                 </button>
               ))}
             </div>
           </div>
+
+          {selectedVariant && (
+            <p className="text-sm text-gray-500 mt-2">
+              Stock available: {selectedVariant.stock}
+            </p>
+          )}
 
           {/* Quantity */}
           <div className="mt-4">
@@ -130,8 +145,9 @@ const ProductDetail = () => {
               <span>{quantity}</span>
 
               <button
+                disabled={!selectedVariant || quantity >= selectedVariant.stock}
                 onClick={() => setQuantity(quantity + 1)}
-                className="px-3 py-1 border"
+                className="px-3 py-1 border disabled:opacity-50"
               >
                 +
               </button>
@@ -142,7 +158,8 @@ const ProductDetail = () => {
             onClick={addToCart}
             className="mt-6 bg-gray-900 text-white px-6 py-2 hover:bg-gray-800"
           >
-            <Link to="/cart">Add to Cart</Link>
+            {/* <Link to="/cart">Add to Cart</Link> */}
+            Add to Cart
           </button>
 
           <div className="mt-6">

@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../Context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formdata, setFormData] = useState({
@@ -9,6 +10,7 @@ const Register = () => {
   });
 
   const { token, setToken } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -23,7 +25,7 @@ const Register = () => {
     if (data.token) {
       localStorage.setItem("token", data.token);
       setToken(data.token);
-      //navigate("/");
+      navigate("/");
       alert("Registered Successfully");
     }
     setFormData({ name: "", email: "", password: "" });
@@ -112,7 +114,7 @@ const Register = () => {
               type="submit"
               className="flex w-full justify-center bg-gray-800 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
             >
-              Sign up
+              Sing Up
             </button>
           </div>
         </form>
