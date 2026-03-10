@@ -12,7 +12,17 @@ class ProductController extends Controller
     {
         //dd(request(['category_id']));
         try {
-            $products = Product::filter(request(['category_id']))->orderBy('products.id', 'desc')->with('category')->get();
+            $products = Product::filter(request(['category_id']))->inRandomOrder()->with('category')->get();
+            return response()->json($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function discounted()
+    {
+        try {
+            $products = Product::where('discount_percentage', '>', 0)->orderBy('discount_percentage', 'desc')->with('category')->get();
             return response()->json($products);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

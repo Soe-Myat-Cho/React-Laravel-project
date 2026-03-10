@@ -113,7 +113,7 @@ const Products = () => {
           <div key={product.id} className="py-8">
             <Link to={`/products/${product.id}`}>
               <img
-                src="https://dtcralphlauren.scene7.com/is/image/PoloGSI/s7-AI211970691001_alternate10?$plpDeskRF$"
+                src={`/${product.image1}`}
                 className="aspect-square w-full h-full object-cover xl:aspect-7/8 transform hover:opacity-90 transition duration-300 ease-in-out"
               />
               <div className="items-baseline flex space-x-3">
@@ -152,3 +152,5 @@ const Products = () => {
 };
 
 export default Products;
+
+// https://dtcralphlauren.scene7.com/is/image/PoloGSI/s7-AI211970691001_alternate10?$plpDeskRF$

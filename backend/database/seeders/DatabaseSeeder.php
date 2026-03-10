@@ -53,22 +53,24 @@ class DatabaseSeeder extends Seeder
         //     ->has(Order::factory(2)->has(OrderItem::factory(3), 'order_items'))
         //     ->create();
 
-        Product::factory(20)
-            ->has(
-                ProductVariants::factory()
-                    ->count(4)
-                    ->sequence(
-                        ['size' => 'S'],
-                        ['size' => 'M'],
-                        ['size' => 'L'],
-                        ['size' => 'XL'],
-                    )
-            )
-            ->create();
+        // Product::factory(20)
+        //     ->has(
+        //         ProductVariants::factory()
+        //             ->count(4)
+        //             ->sequence(
+        //                 ['size' => 'S'],
+        //                 ['size' => 'M'],
+        //                 ['size' => 'L'],
+        //                 ['size' => 'XL'],
+        //             )
+        //     )
+        //     ->create();
 
         User::factory(5)
             // ->has(Cart::factory()->has(CartItem::factory(3), 'cartItems'))
             // ->has(Order::factory(2)->has(OrderItem::factory(3), 'order_items'))
             ->create();
+
+        $this->call(ProductSeeder::class);
     }
 }

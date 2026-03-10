@@ -27,6 +27,9 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanc
 // get all products && can be filtered by category
 Route::get('/products', [ProductController::class, 'index']);
 
+//get most discounted products
+Route::get('/products/discounted', [ProductController::class, 'discounted']);
+
 // get single product
 Route::get('/products/{product}', [ProductController::class, 'show']);
 

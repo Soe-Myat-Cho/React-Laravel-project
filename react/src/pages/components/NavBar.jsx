@@ -55,7 +55,7 @@ const NavBar = () => {
 
         <li>
           <Link to="/products" className="cursor-pointer">
-            Products
+            Shop all
           </Link>
         </li>
 

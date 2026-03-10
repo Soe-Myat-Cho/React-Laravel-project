@@ -163,7 +163,7 @@ const Cart = () => {
               className="flex space-x-5 border-gray-400 border-b pb-4 mt-10"
             >
               <img
-                src="https://dtcralphlauren.scene7.com/is/image/PoloGSI/s7-AI211970691001_alternate4?$rl_4x5_zoom$"
+                src={`/${cartItem.product_variant.product?.image1}`}
                 alt="Product Image"
                 className="object-cover w-1/5"
               />
@@ -184,12 +184,12 @@ const Cart = () => {
                       <>
                         {product.discount_percentage > 0 && (
                           <p className="text-gray-500 line-through">
-                            ${product.price}
+                            {product.price} Ks
                           </p>
                         )}
 
                         <p className="text-lg font-medium text-gray-900">
-                          ${discountedPrice.toFixed(1)}
+                          {discountedPrice.toFixed(1)} Ks
                         </p>
                       </>
                     );
@@ -224,7 +224,7 @@ const Cart = () => {
       </div>
 
       <div className="mt-6 text-right">
-        <h3 className="text-xl font-semibold">Total : ${totalPrice}</h3>
+        <h3 className="text-xl font-semibold">Total : {totalPrice} Ks</h3>
         <div className="mt-8 bg-white border rounded-lg p-6 shadow-sm text-left">
 
           <h3 className="text-lg font-semibold mb-6">Delivery Information</h3>
@@ -321,17 +321,6 @@ const Cart = () => {
           </div>
 
         </div>
-        {/* <div className="mt-4">
-          <textarea
-            value={shippingAddress}
-            onChange={(e) => setShippingAddress(e.target.value)}
-            id="orderNotes"
-            name="shipping_address"
-            className="w-full p-2 border"
-            rows="8"
-            placeholder="Enter your shipping address"
-          ></textarea>
-        </div> */}
 
         <button
           onClick={() => handleCheckout()}

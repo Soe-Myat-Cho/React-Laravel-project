@@ -65,7 +65,7 @@ const ProductDetail = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-1 bg-white border-gray-400 border">
         <div>
           <img
-            src="https://dtcralphlauren.scene7.com/is/image/PoloGSI/s7-AI211970691001_alternate1?$rl_4x5_zoom$"
+            src={`/${product?.image2}`}
             alt="Product Image"
             className="object-fit w-full border-gray-400 border-r"
           />
@@ -84,18 +84,18 @@ const ProductDetail = () => {
           <div className="flex space-x-3 items-baseline">
             {product?.discount_percentage > 0 ? (
               <p className="mt-1 text-2xl  text-gray-900">
-                $
+
                 {(
                   product.price -
                   product.price * (product.discount_percentage / 100)
-                ).toFixed(1)}
+                ).toFixed(1)} Ks
               </p>
             ) : (
               <p className="mt-1 text-2xl  text-gray-900">${product?.price}</p>
             )}
             {product?.discount_percentage > 0 && (
               <p className="mt-1 text-xl text-gray-600 line-through">
-                ${product?.price}
+                {product?.price} Ks
               </p>
             )}
           </div>
@@ -174,14 +174,14 @@ const ProductDetail = () => {
 
         <div>
           <img
-            src="https://dtcralphlauren.scene7.com/is/image/PoloGSI/s7-AI211970691001_alternate4?$rl_4x5_zoom$"
+            src={`/${product?.image3}`}
             alt="Product Image"
             className="object-fit w-full border-gray-400 border-r"
           />
         </div>
         <div>
           <img
-            src="https://dtcralphlauren.scene7.com/is/image/PoloGSI/s7-AI211970691001_alternate3?$rl_4x5_zoom$"
+            src={`/${product?.image4}`}
             alt="Product Image"
             className="object-fit w-full border-gray-400 border-r"
           />

@@ -14,11 +14,7 @@ const Products = () => {
         3: "https://media1.calvinklein.com/images/20250506_misc/PLP/PLP_Header_Kids.webp"
 
     };
-    const productImages = {
-        1: "https://calvinklein.scene7.com/is/image/CalvinKlein/40BC238_YAF_main?wid=352&hei=464&qlt=80%2C0&resMode=sharp2&op_usm=0.9%2C1.0%2C8%2C0&iccEmbed=0&fmt=webp",
-        2: "https://dtcralphlauren.scene7.com/is/image/PoloGSI/s7-AI211970691001_alternate10?$plpDeskRF$",
-        3: "https://calvinklein-eu.scene7.com/is/image/CalvinKleinEU/IG0IG03022_PGB_main?$b2c_uplp_listing_2560$"
-    };
+
 
 
     // const fetchProducts = async () => {
@@ -90,7 +86,7 @@ const Products = () => {
                     <div key={product.id} className="py-8">
                         <Link to={`/products/${product.id}`}>
                             <img
-                                src={productImages[id]}
+                                src={`/${product?.image1}`}
                                 className="aspect-square w-full h-full object-cover xl:aspect-7/8 transform hover:opacity-90 transition duration-300 ease-in-out"
                             />
                             <div className="items-baseline flex space-x-3">
