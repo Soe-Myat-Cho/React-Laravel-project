@@ -9,7 +9,7 @@ const NavBar = () => {
               href="/admin/dashboard"
               className="block p-2 rounded hover:bg-gray-300 hover:text-gray-800"
             >
-              Dashboard
+              Dashboard London
             </a>
           </li>
           <li className="mb-4">

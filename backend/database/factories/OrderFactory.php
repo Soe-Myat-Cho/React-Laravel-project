@@ -19,8 +19,14 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'total_price' => fake()->randomNumber(3),
-            'shipping_address' => fake()->address(),
+            'total_price' => $this->faker->randomFloat(2, 20, 500),
+            'payment_method' => 'cod',
+            'shipping_address' => $this->faker->address(),
+            'phone_number' => $this->faker->phoneNumber(),
+            'receiver_name' => $this->faker->name(),
+            'delivery_notes' => $this->faker->optional()->sentence(),
+            'status' => $this->faker->randomElement(['pending', 'processing', 'completed']),
+            'created_at' => $this->faker->dateTimeBetween('-30 days', 'now'),
         ];
     }
 }

@@ -66,11 +66,27 @@ class DatabaseSeeder extends Seeder
         //     )
         //     ->create();
 
-        User::factory(5)
-            // ->has(Cart::factory()->has(CartItem::factory(3), 'cartItems'))
-            // ->has(Order::factory(2)->has(OrderItem::factory(3), 'order_items'))
-            ->create();
+        // User::factory(5)
+        //     ->has(Cart::factory()->has(CartItem::factory(3), 'cartItems'))
+        //     ->has(Order::factory(2)->has(OrderItem::factory(3), 'order_items'))
+        //     ->create();
 
         $this->call(ProductSeeder::class);
+
+        $users = User::factory(5)->create();
+
+
+        // create orders for users
+        foreach ($users as $user) {
+
+            \App\Models\Order::factory(3)
+                ->for($user)
+                ->has(
+                    \App\Models\OrderItem::factory()
+                        ->count(rand(1, 4)),
+                    'order_items'
+                )
+                ->create();
+        }
     }
 }

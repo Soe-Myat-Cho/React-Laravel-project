@@ -77,4 +77,54 @@ class OrderController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function getOrders()
+    {
+        try {
+
+            $orders = Order::filter(request(['status', 'date']))
+                ->with(['order_items', 'user'])
+                ->latest()
+                ->get();
+
+
+            return response()->json($orders);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getOrder(Order $id)
+    {
+        try {
+            return response()->json($id->load(['order_items.productVariant.product', 'user']));
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        $request->validate([
+            'status' => 'required|in:pending,processing,completed'
+        ]);
+
+        $order->status = $request->status;
+        $order->save();
+
+        $order->load(['order_items.productVariant.product', 'user']);
+
+        return response()->json([
+            'message' => 'Order status updated',
+            'order' => $order
+        ]);
+    }
 }

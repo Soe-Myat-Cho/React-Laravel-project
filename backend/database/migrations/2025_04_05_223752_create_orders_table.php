@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone_number');
             $table->string('receiver_name');
             $table->text('delivery_notes')->nullable();
+            $table->enum('status', ['pending', 'processing', 'completed'])->default('pending');
             $table->timestamps();
         });
     }
