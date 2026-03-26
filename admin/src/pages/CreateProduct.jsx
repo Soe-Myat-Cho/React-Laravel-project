@@ -4,11 +4,11 @@ const CreateProduct = () => {
     name: "",
     description: "",
     price: "",
-    quantity: "",
     discount_percentage: "",
     image1: "",
     image2: "",
     image3: "",
+    image4: "",
     category_id: "",
   });
 
@@ -16,6 +16,7 @@ const CreateProduct = () => {
     image1: "",
     image2: "",
     image3: "",
+    image4: "",
   });
 
   const [categories, setCategories] = useState([]);
@@ -30,52 +31,81 @@ const CreateProduct = () => {
     console.log(data);
   };
 
+  // const handleCreateProduct = async (e) => {
+  //   e.preventDefault();
+  //   console.log(img.image1.name, img.image2.name, img.image3.name);
+
+  //   try {
+  //     const img = await fetch("/api/products/upload", {
+  //       method: "POST",
+  //       body: JSON.stringify(img),
+  //     });
+  //     const data = await img.json();
+  //     console.log(data);
+
+  //     setFormData({
+  //       ...formdata,
+  //       image1: data.image1,
+  //       image2: data.image2,
+  //       image3: data.image3,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+  //   try {
+  //     const imgUpload = new FormData();
+  //     imgUpload.append("image1", formdata.image1);
+  //     imgUpload.append("image2", formdata.image2);
+  //     imgUpload.append("image3", formdata.image3);
+
+  //     const img = await fetch("/api/products/upload", {
+  //       method: "POST",
+  //       body: imgUpload,
+  //     });
+  //     const data = await img.text();
+  //     console.log(data);
+
+  //     setFormData({
+  //       ...formdata,
+  //       image1: data.image1,
+  //       image2: data.image2,
+  //       image3: data.image3,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+
+  // };
+
   const handleCreateProduct = async (e) => {
     e.preventDefault();
-    // console.log(img.image1.name, img.image2.name, img.image3.name);
 
-    // try {
-    //   const img = await fetch("/api/products/upload", {
-    //     method: "POST",
-    //     body: JSON.stringify(img),
-    //   });
-    //   const data = await img.json();
-    //   console.log(data);
+    const data = new FormData();
 
-    //   setFormData({
-    //     ...formdata,
-    //     image1: data.image1,
-    //     image2: data.image2,
-    //     image3: data.image3,
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    data.append("name", formdata.name);
+    data.append("description", formdata.description);
+    data.append("price", formdata.price);
+    data.append("discount_percentage", formdata.discount_percentage);
+    data.append("category_id", formdata.category_id);
+
+    // data.append("image1", formdata.image1);
+    // data.append("image2", formdata.image2);
+    // data.append("image3", formdata.image3);
+    // data.append("image4", formdata.image4);
 
     try {
-      const imgUpload = new FormData();
-      imgUpload.append("image1", formdata.image1);
-      imgUpload.append("image2", formdata.image2);
-      imgUpload.append("image3", formdata.image3);
-
-      const img = await fetch("/api/products/upload", {
+      const res = await fetch("/api/products", {
         method: "POST",
-        body: imgUpload,
+        body: data,
       });
-      const data = await img.text();
-      console.log(data);
 
-      setFormData({
-        ...formdata,
-        image1: data.image1,
-        image2: data.image2,
-        image3: data.image3,
-      });
+      const result = await res.json();
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
-
-    //
   };
 
   useEffect(() => {
@@ -157,25 +187,6 @@ const CreateProduct = () => {
 
           <div>
             <label className="block text-sm/6 font-medium text-gray-900">
-              Quantity
-            </label>
-            <div className="mt-2">
-              <input
-                value={formdata.quantity}
-                onChange={(e) =>
-                  setFormData({ ...formdata, quantity: e.target.value })
-                }
-                type="text"
-                name="quantity"
-                id="quantity"
-                required
-                className="border block w-full  bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-700 sm:text-sm/6"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm/6 font-medium text-gray-900">
               Product Image 1
             </label>
             <div className="mt-2">
@@ -184,8 +195,8 @@ const CreateProduct = () => {
                   setFormData({ ...formdata, image1: e.target.files[0] })
                 }
                 type="file"
-                name="image"
-                id="image"
+                name="image1"
+                id="image1"
                 required
                 className="border block w-full  bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-700 sm:text-sm/6"
               />
@@ -202,8 +213,8 @@ const CreateProduct = () => {
                   setFormData({ ...formdata, image2: e.target.files[0] })
                 }
                 type="file"
-                name="image"
-                id="image"
+                name="image2"
+                id="image2"
                 required
                 className="border block w-full  bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-700 sm:text-sm/6"
               />
@@ -220,8 +231,26 @@ const CreateProduct = () => {
                   setFormData({ ...formdata, image3: e.target.files[0] })
                 }
                 type="file"
-                name="image"
-                id="image"
+                name="image3"
+                id="image3"
+                required
+                className="border block w-full  bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-700 sm:text-sm/6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Product Image 4
+            </label>
+            <div className="mt-2">
+              <input
+                onChange={(e) =>
+                  setFormData({ ...formdata, image4: e.target.files[0] })
+                }
+                type="file"
+                name="image4"
+                id="image4"
                 required
                 className="border block w-full  bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-700 sm:text-sm/6"
               />

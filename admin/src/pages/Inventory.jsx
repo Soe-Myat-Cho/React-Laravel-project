@@ -6,7 +6,7 @@ const Inventory = () => {
   const [categories, setCategories] = useState([]);
 
   const fetchProducts = async () => {
-    const res = await fetch("/api/products", {
+    const res = await fetch("/api/inventory", {
       method: "GET",
     });
     const data = await res.json();
@@ -22,6 +22,24 @@ const Inventory = () => {
     const data = await res.json();
     setCategories(data);
     console.log(data);
+  };
+
+  const deleteProduct = async (id) => {
+
+    if (!confirm("Are you sure you want to delete this product?")) return;
+
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        setProducts(products.filter(product => product.id !== id));
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -53,7 +71,6 @@ const Inventory = () => {
               <th className="py-3 px-4 text-left">Product ID</th>
               <th className="py-3 px-4 text-left">Product Name</th>
               <th className="py-3 px-4 text-left">Price</th>
-              <th className="py-3 px-4 text-left">Quantity</th>
               <th className="py-3 px-4 text-left">Discount</th>
               <th className="py-3 px-4 text-left">Category</th>
               <th className="py-3 px-4 text-left">Actions</th>
@@ -65,20 +82,22 @@ const Inventory = () => {
                 <td className="py-3 px-4">{product.id}</td>
                 <td className="py-3 px-4 ">{product.name}</td>
                 <td className="py-3 px-4 ">${product.price}</td>
-                <td className="py-3 px-4 text-center ">{product.quantity}</td>
                 <td className="py-3 px-4 text-center">
                   {product.discount_percentage}%
                 </td>
                 <td className="py-3 px-4">{product.category.name}</td>
                 <td className="py-3 px-4">
                   <div className="flex space-x-4">
-                    <a
+                    {/* <a
                       href="#"
                       className="text-gray-900 px-3 py-1 rounded hover:underline"
                     >
                       Edit
-                    </a>
-                    <button className="bg-red-500 text-white px-3 py-1 rounded-sm hover:bg-red-600 cursor-pointer ">
+                    </a> */}
+                    <button
+                      onClick={() => deleteProduct(product.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded-sm hover:bg-red-600 cursor-pointer"
+                    >
                       Delete
                     </button>
                   </div>

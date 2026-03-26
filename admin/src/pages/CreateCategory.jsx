@@ -29,7 +29,7 @@ const CreateProduct = () => {
     <div className="w-full">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-          Create a new product
+          Create a new Category
         </h2>
       </div>
 

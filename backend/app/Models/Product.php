@@ -10,7 +10,7 @@ class Product extends Model
     /** @use HasFactory<\Database\Factories\ProductFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'price', 'quantity', 'discount_percentage', 'image1', 'image2', 'image3', 'category_id'];
+    protected $fillable = ['name', 'description', 'price', 'quantity', 'discount_percentage', 'image1', 'image2', 'image3', 'image4', 'category_id'];
 
     //filter wirh category_id
     public function scopeFilter($query, array $filters)

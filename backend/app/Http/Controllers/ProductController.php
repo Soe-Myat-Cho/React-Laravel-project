@@ -71,32 +71,106 @@ class ProductController extends Controller
         }
     }
 
+    // public function store(Request $request)
+    // {
+    //     try {
+    //         $validated = Validator::make($request->all(), [
+    //             'name' => 'required',
+    //             'description' => 'required',
+    //             'price' => 'required',
+    //             'discount_percentage' => 'required',
+    //             'image1' => 'required',
+    //             'image2' => 'required',
+    //             'image3' => 'required',
+    //             'category_id' => ['required', 'exists:categories,id'],
+    //         ]);
+
+    //         if ($validated->fails()) {
+    //             return response()->json([
+    //                 'error' => 'Validation Error',
+    //                 'errors' => $validated->errors()
+    //             ], 422);
+    //         }
+
+    //         $product = Product::create(request()->all());
+
+    //         return response()->json($product, 201);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => $e->getMessage()], 500);
+    //     }
+    // }
+
     public function store(Request $request)
     {
-        //dd($request->all());
         try {
-            $validated = Validator::make($request->all(), [
+
+            $validated = $request->validate([
                 'name' => 'required',
                 'description' => 'required',
                 'price' => 'required',
-                'quantity' => 'required',
                 'discount_percentage' => 'required',
-                'image1' => 'required',
-                'image2' => 'required',
-                'image3' => 'required',
-                'category_id' => ['required', 'exists:categories,id'],
+                'image1' => 'required|image',
+                'image2' => 'required|image',
+                'image3' => 'required|image',
+                'image4' => 'required|image',
+                'category_id' => 'required|exists:categories,id',
+            ]);
+
+            $image1 = '/storage/' . $request->file('image1')->store('products');
+            $image2 = '/storage/' . $request->file('image2')->store('products');
+            $image3 = '/storage/' . $request->file('image3')->store('products');
+            $image4 = '/storage/' . $request->file('image4')->store('products');
+
+            $product = Product::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'price' => $request->price,
+                'discount_percentage' => $request->discount_percentage,
+                'image1' => $image1,
+                'image2' => $image2,
+                'image3' => $image3,
+                'image4' => $image4,
+                'category_id' => $request->category_id,
+            ]);
+
+            return response()->json($product, 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function addProduct(Request $request)
+    {
+        //return response()->json($request->all());
+        try {
+            $validated = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'description' => 'required|string',
+                'price' => 'required|numeric',
+                'discount_percentage' => 'required|numeric',
+                'category_id' => 'required|integer',
+                // 'image1' => 'nullable|image|max:2048',
             ]);
 
             if ($validated->fails()) {
-                return response()->json([
-                    'error' => 'Validation Error',
-                    'errors' => $validated->errors()
-                ], 422);
+                return response()->json(['error' => $validated->errors()], 422);
             }
 
-            $product = Product::create(request()->all());
+            $data = $request->all();
 
-            return response()->json($product, 201);
+            // Handle File Upload
+            if ($request->hasFile('image1')) {
+                // Stores in storage/app/public/products
+                $path = $request->file('image1')->store('products', 'public');
+                // Save the path in the database
+                $data['image1'] = $path;
+            }
+
+            $Product = Product::create($data);
+
+            return response()->json($Product, 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -139,8 +213,19 @@ class ProductController extends Controller
             $product->delete();
             return response()->json([
                 'message' => 'Product deleted successfully',
-                'status' => 204
             ], 204);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getInventory()
+    {
+
+        //dd(request(['category_id']));
+        try {
+            $products = Product::filter(request(['category_id']))->with('category')->get();
+            return response()->json($products);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

@@ -58,6 +58,9 @@ Route::post('/products/upload', [ProductController::class, 'uploadImage']);
 //create product
 Route::post('/products', [ProductController::class, 'store']);
 
+//add product
+Route::post('/products/add', [ProductController::class, 'addProduct']);
+
 //update product
 Route::put('/products/{product}', [ProductController::class, 'update']);
 
@@ -78,5 +81,18 @@ Route::delete('/cart-items/{cartItem}', [CartItemController::class, 'removeFromC
 //update cart-item
 Route::put('/cart-items/{id}', [CartController::class, 'updateCartItem']);
 
+
 //order
 Route::post('/order', [OrderController::class, 'order'])->middleware('auth:sanctum');
+
+//get user orders
+Route::get('/orders', [OrderController::class, 'getOrders']);
+
+//update order status
+Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
+
+//get single order
+Route::get('/orders/{id}', [OrderController::class, 'getOrder']);
+
+//get inventory
+Route::get('/inventory', [ProductController::class, 'getInventory']);
